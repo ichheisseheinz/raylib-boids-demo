@@ -5,12 +5,12 @@ class Boid:
     def __init__(self, position: Vector2, rotation: int):
         self.position = position
         self.rotation = rotation
-        self.velocity = vector2_rotate(Vector2(1, 0), np.deg2rad(rotation))
         self.max_speed: int = 10
         self.size: int = 10
 
+        self.velocity = vector2_rotate(Vector2(1, 0), np.deg2rad(rotation))
         self.acceleration: Vector2 = vector2_zero()
-        self.max_force = 0.1
+        self.max_force = 0.2
     
     def check_edges(self):
         if self.position.x < -self.size:
@@ -42,7 +42,7 @@ class Boid:
         return steering
     
     def separation(self, boids):
-        radius: int = 24
+        radius: int = 50
         steering: Vector2 = vector2_zero()
         total: int = 0
 
@@ -95,9 +95,9 @@ class Boid:
 
         self.flock(boids)
 
-        self.position = vector2_add(self.position, self.velocity)
         self.velocity = vector2_add(self.velocity, self.acceleration)
         self.velocity = vector2_clamp_value(self.velocity, 0, self.max_speed)
+        self.position = vector2_add(self.position, self.velocity)
         self.acceleration = vector2_zero()
 
         self.rotation = np.rad2deg(vector2_angle(Vector2(1, 0), self.velocity))
